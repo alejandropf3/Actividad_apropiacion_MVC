@@ -28,8 +28,14 @@ export const obtenerPQRS = async (peticion, respuesta) => {
 export const obtenerPQRSPorId = async (peticion, respuesta) => {
     try{
         const { id } = peticion.params;
-        const datoId = await pqrsModelo.obetenerPorId(id);
-        respuesta.status(200).json(datoId);
+        const dato = await pqrsModelo.obetenerPorId(id);
+        // VALIDACIÓN: Si el modelo no encontró nada (es null)
+        if (!dato) {
+            return res.status(404).json({ 
+                mensaje: `La PQRS con ID ${id} no fue encontrada` 
+            });
+        }
+        respuesta.status(200).json(dato);
     }
     catch(error){
         console.log(error);
